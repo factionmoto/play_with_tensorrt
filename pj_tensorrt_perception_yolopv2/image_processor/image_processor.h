@@ -22,6 +22,8 @@ limitations under the License.
 #include <vector>
 #include <array>
 
+#include "detection_engine.h"
+
 namespace cv {
     class Mat;
 };
@@ -44,6 +46,8 @@ typedef struct {
 
 int32_t Initialize(const InputParam& input_param);
 int32_t Process(cv::Mat& mat, Result& result);
+int32_t RunYOLOP(cv::Mat& mat, DetectionEngine::Result& result);
+int32_t DrawMask(cv::Mat& image, cv::Mat& im_seg_max);
 int32_t Finalize(void);
 int32_t Command(int32_t cmd);
 

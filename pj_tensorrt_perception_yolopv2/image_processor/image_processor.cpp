@@ -34,7 +34,6 @@ limitations under the License.
 #include "common_helper_cv.h"
 #include "camera_model.h"
 #include "bounding_box.h"
-#include "detection_engine.h"
 #include "tracker.h"
 #include "image_processor.h"
 
@@ -274,7 +273,7 @@ int32_t ImageProcessor::Process(cv::Mat& mat, ImageProcessor::Result& result)
     return 0;
 }
 
-int32 RunYOLOP(cv::Mat& mat, DetectionEngine::Result& result){
+int32_t ImageProcessor::RunYOLOP(cv::Mat& mat, DetectionEngine::Result& result){
     /*
     \\TODO: Add function definition
 
@@ -314,6 +313,25 @@ int32 RunYOLOP(cv::Mat& mat, DetectionEngine::Result& result){
         return -1;
     }
 
-    result = &det_result;
+    result = det_result;
+}
+
+int32_t ImageProcessor::DrawMask(cv::Mat& mat, cv::Mat& mat_seg_max){
+    /*** Draw segmentation image for the class of the highest score ***/
+    cv::Mat mat_seg_max_list[] = { mat_seg_max, mat_seg_max, mat_seg_max };
+    cv::merge(mat_seg_max_list, 3, mat_seg_max);
+    cv::Mat mat_lut = cv::Mat::zeros(256, 1, CV_8UC3);
+    mat_lut.at<cv::Vec3b>(0) = cv::Vec3b(0, 0, 0);
+    mat_lut.at<cv::Vec3b>(1) = cv::Vec3b(0, 255, 0);
+    mat_lut.at<cv::Vec3b>(2) = cv::Vec3b(0, 0, 255);
+    cv::LUT(mat_seg_max, mat_lut, mat_seg_max);
+    cv::resize(mat_seg_max, mat_seg_max, mat.size(), 0.0, 0.0, cv::INTER_NEAREST);
+    cv::Mat mat_masked;
+    cv::addWeighted(mat, 0.8, mat_seg_max, 0.5, 0, mat_masked);
+    //cv::add(mat_seg_max * kResultMixRatio, mat * (1.0f - kResultMixRatio), mat_masked);
+    //cv::hconcat(mat, mat_masked, mat);
+    mat = mat_masked;
+
+    return 0;
 }
 

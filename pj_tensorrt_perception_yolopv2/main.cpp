@@ -79,8 +79,9 @@ int32_t main(int argc, char* argv[])
 
         /* Call image processor library */
         const auto& time_image_process0 = std::chrono::steady_clock::now();
-        ImageProcessor::Result result;
-        ImageProcessor::Process(image, result);
+        DetectionEngine::Result result;
+        ImageProcessor::RunYOLOP(image, result);
+        ImageProcessor::DrawMask(image,result.mat_seg_max);
         const auto& time_image_process1 = std::chrono::steady_clock::now();
 
         /* Display result */
