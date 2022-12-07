@@ -274,3 +274,46 @@ int32_t ImageProcessor::Process(cv::Mat& mat, ImageProcessor::Result& result)
     return 0;
 }
 
+int32 RunYOLOP(cv::Mat& mat, DetectionEngine::Result& result){
+    /*
+    \\TODO: Add function definition
+
+    Output Format:
+    typedef struct Result_ {
+        cv::Mat                  mat_seg_max;          // [height, width, 1]. value is 0 - 2  (uint8_t)
+        std::vector<BoundingBox> bbox_list;
+        struct crop_ {
+            int32_t x;
+            int32_t y;
+            int32_t w;
+            int32_t h;
+            crop_() : x(0), y(0), w(0), h(0) {}
+        } crop;
+        double                   time_pre_process;		// [msec]
+        double                   time_inference;		// [msec]
+        double                   time_post_process;	    // [msec]
+        Result_() : time_pre_process(0), time_inference(0), time_post_process(0)
+        {}
+    } Result;
+    */
+    if (!s_engine) {
+        PRINT_E("Not initialized\n");
+        return -1;
+    }
+
+    /*** Initialize camera parameters for input image size ***/
+    static bool s_is_initialize_transform_mat = false;
+    if (!s_is_initialize_transform_mat) {
+        s_is_initialize_transform_mat = true;
+        CreateTransformMat(mat.cols, mat.rows, 80);
+    }
+
+    /*** Call inference ***/
+    DetectionEngine::Result det_result;
+    if (s_engine->Process(mat, det_result) != DetectionEngine::kRetOk) {
+        return -1;
+    }
+
+    result = &det_result;
+}
+
