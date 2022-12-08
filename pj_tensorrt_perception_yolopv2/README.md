@@ -14,6 +14,7 @@ https://user-images.githubusercontent.com/11009876/188130488-1f002976-4257-42f8-
 1. Please follow the instruction: https://github.com/iwatake2222/play_with_tensorrt/blob/master/README.md
 2. Additional steps:
     - Download the model using the following script
+        - (update) actually the model can be found in https://drive.google.com/file/d/1LwqTB_3BJXGa2xJGg6YFA2F-4aga59vf/view?usp=share_link
         - https://github.com/PINTO0309/PINTO_model_zoo/tree/main/326_YOLOPv2
         - copy `yolopv2_384x640` to `resource/model/yolopv2_384x640`
     - Build `pj_tensorrt_perception_yolopv2` project (this directory)
