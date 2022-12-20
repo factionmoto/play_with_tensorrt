@@ -75,6 +75,19 @@ int32_t main(int argc, char* argv[])
             image = cv::imread(input_name);
         }
         if (image.empty()) break;
+
+
+      // mask the bottom 80pixels to prevent the windshelf from confusing the model
+      // select a region of interest
+      cv::Mat pRoi = image(cv::Rect(0, 640+1, 1280, 80-1));
+
+      // set roi to some rgb colour   
+      pRoi.setTo(cv::Scalar(0, 0, 0));
+
+
+
+
+
         const auto& time_cap1 = std::chrono::steady_clock::now();
 
         /* Call image processor library */
@@ -90,6 +103,7 @@ int32_t main(int argc, char* argv[])
         }
         if (writer.isOpened()) writer.write(image);
         cv::imshow("test", image);
+        cv::imshow("detection", result.mat_seg_max);
 
         /* Input key command */
         if (cap.isOpened()) {

@@ -18,7 +18,7 @@ if(COMMON_HELPER_WITH_OPENCV)
     set(SRC ${SRC} common_helper_cv.h common_helper_cv.cpp)
 endif()
 
-add_library(${LibraryName} ${SRC})
+add_library(${LibraryName} SHARED ${SRC})
 
 if(COMMON_HELPER_WITH_OPENCV)
     find_package(OpenCV REQUIRED)
